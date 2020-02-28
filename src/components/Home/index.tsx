@@ -95,7 +95,7 @@ class home extends React.Component<any, IState> {
             tabList = this.state.tabs.map((tab, index) => {
                 return (
                     <li key={index} className="nav-item">
-                        <a className="nav-link" href={tab.tagPath}>{tab.tagName}</a>
+                        <a className="nav-link" href={tab.tagPath} onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()} >{tab.tagName}</a>
                     </li>
                 )
             })
