@@ -15,6 +15,11 @@ export interface IArticle {
 }
 
 export interface IPopularTag {
+    tagName: string,
     tagPath: string,
-    tagName: string
+    tagClickHandler?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+}
+
+export interface IState {
+    tabs: IPopularTag[]
 }

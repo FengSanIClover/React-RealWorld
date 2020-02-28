@@ -2,7 +2,8 @@ import React from 'react';
 import Article from 'components/Home/Article';
 import PopularTag from 'components/Home/PopularTag';
 import moment from 'moment';
-import { IArticle, IPopularTag } from 'models/Home';
+import _ from 'lodash';
+import { IArticle, IPopularTag, IState } from 'models/Home';
 
 const articles: IArticle[] = [
     {
@@ -58,10 +59,24 @@ const popularTags: IPopularTag[] = [
     }
 ]
 
-class home extends React.Component {
+class home extends React.Component<any, IState> {
+
+    state: IState = {
+        tabs: [
+            {
+                tagPath: "index.html",
+                tagName: "Your Feed",
+            },
+            {
+                tagPath: "index.html",
+                tagName: "Global Feed"
+            }
+        ]
+    }
+
     render() {
 
-        let articlePreviews: any = <p>Now is no article</p>;
+        let articlePreviews: any = <p>No article</p>;
         if (articles.length > 0) {
             articlePreviews = articles.map((article, index) => {
                 return <Article key={index} {...article} />
@@ -71,8 +86,29 @@ class home extends React.Component {
         let popularTagList: any = <p>No tag</p>;
         if (popularTags.length > 0) {
             popularTagList = popularTags.map((popularTag, index) => {
-                return <PopularTag key={index} {...popularTag} />
+                return <PopularTag key={index} {...popularTag} tagClickHandler={(e: React.MouseEvent<HTMLAnchorElement>) => tagClickHandler(e, popularTag)} />
             })
+        }
+
+        let tabList: any = <p>No Tab</p>;
+        if (this.state.tabs.length > 0) {
+            tabList = this.state.tabs.map((tab, index) => {
+                return (
+                    <li key={index} className="nav-item">
+                        <a className="nav-link" href={tab.tagPath}>{tab.tagName}</a>
+                    </li>
+                )
+            })
+        }
+
+        const tagClickHandler = (event: React.MouseEvent<HTMLAnchorElement>, popularTag: IPopularTag) => {
+            event.preventDefault();
+
+            if (this.state.tabs.findIndex(tab => _.isMatch(tab, popularTag)) === -1) {
+                const newTabs: IPopularTag[] = [...this.state.tabs];
+                newTabs.push(popularTag);
+                this.setState({ tabs: newTabs })
+            }
         }
 
         return (
@@ -88,12 +124,7 @@ class home extends React.Component {
                         <div className="col-md-9">
                             <div className="feed-toggle">
                                 <ul className="nav nav-pills outline-active">
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="index.html">Your Feed</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link active" href="index.html">Global Feed</a>
-                                    </li>
+                                    {tabList}
                                 </ul>
                             </div>
                             {articlePreviews}
