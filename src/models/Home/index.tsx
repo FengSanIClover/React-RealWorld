@@ -1,25 +1,25 @@
-// export interface IHome {
-//     articles: IArticle[],
-//     popularTags: IPopularTag[]
-// }
-
 export interface IArticle {
-    imagePath: string,
-    profilePath: string,
-    author: string,
-    publishDate: string,
-    likes: number,
     title: string,
-    articlePath: string,
-    content: string
+    slug: string,
+    body: string,
+    createdAt: string,
+    updatedAt: string,
+    tagList: [],
+    description: string,
+    favorited: number,
+    favoritesCount: number,
+    author: Author
 }
 
-export interface IPopularTag {
-    tagName: string,
-    tagPath: string,
-    tagClickHandler?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+export interface Author {
+    username: string,
+    bio?: string,
+    image: string,
+    following: boolean
 }
 
 export interface IState {
-    tabs: IPopularTag[]
+    tabs: string[],
+    articles: IArticle[],
+    tags: string[]
 }

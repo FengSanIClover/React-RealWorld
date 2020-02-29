@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import { IArticle } from 'models/Home';
 
 const Article: React.SFC<IArticle> = (props) => {
+    const [favoritesCount, setfavoritesCount] = useState(props.favoritesCount);
 
-    const [likes, setLikes] = useState(props.likes);
-
-    const onLikesHandler = (likes: number) => {
-        setLikes(likes += 1);
+    const onLikesHandler = (favoritesCount: number) => {
+        setfavoritesCount(favoritesCount += 1);
     }
     return (
         <div className="article-preview">
             <div className="article-meta">
-                <a href={props.profilePath}>
-                    <img src={props.imagePath} alt={props.author} />
-                </a>
+                <span>
+                    <img src={props.author.image} alt={props.author.username} />
+                </span>
                 <div className="info">
-                    <p className="author">{props.author}</p>
-                    <span className="date">{props.publishDate}</span>
+                    <span className="author">{props.author.username}</span>
+                    <span className="date">{moment(props.createdAt).format("YYYY/MM/DD")}</span>
                 </div>
-                <button className="btn btn-outline-primary btn-sm pull-xs-right" onClick={() => onLikesHandler(likes)}>
+                <button className="btn btn-outline-primary btn-sm pull-xs-right" onClick={() => onLikesHandler(favoritesCount)}>
                     <i className="ion-heart"></i>
-                    {likes}
+                    {favoritesCount}
                 </button>
             </div>
-            <a href={props.articlePath} className="preview-link">
+            <div className="preview-link">
                 <h1>{props.title}</h1>
-                <p>{props.content}</p>
+                <p>{props.body}</p>
                 <span>Read more...</span>
-            </a>
+            </div>
         </div>
     )
 }

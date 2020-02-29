@@ -1,11 +1,10 @@
 import React from 'react';
-import { IPopularTag } from 'models/Home';
 
-const popularTag: React.SFC<IPopularTag> = (props) => {
+const popularTag: React.SFC<{ tagName: string, tagClickHandler: any }> = ({ tagName, tagClickHandler }) => {
     return (
         <>
-            <a href={props.tagPath} className="tag-pill tag-default" onClick={props.tagClickHandler}>
-                {props.tagName}
+            <a href="index.html" className="tag-pill tag-default" onClick={tagClickHandler} >
+                {tagName}
             </a>
         </>
     )
