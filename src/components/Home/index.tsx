@@ -2,12 +2,17 @@ import React from 'react';
 import Article from 'components/Home/Article';
 import PopularTag from 'components/Home/PopularTag';
 import _ from 'lodash';
-import { IState } from 'models/Home';
+import { IState, IProps, IArticle } from 'models/Home';
 import axios from 'axios-setting';
 import { AxiosResponse } from 'axios';
+// import {homeActionType} from 'redux-setting/store/actions/Home';
+import * as actions from 'redux-setting/store/actions/Home';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { reducerType } from 'redux-setting/store/reducers';
 
 
-class home extends React.Component<any, IState> {
+class home extends React.Component<IProps, IState> {
 
     state: IState = {
         tabs: ["Your Feed", "Global Feed"],
@@ -16,11 +21,7 @@ class home extends React.Component<any, IState> {
     }
 
     componentDidMount() {
-        axios.get("/articles").then((res: AxiosResponse) => {
-            if (res.data.returnCode === "0000") {
-                this.setState({ articles: res.data.articles })
-            }
-        })
+        this.props.getArticleList();
 
         axios.get("/tags").then((res: AxiosResponse) => {
             if (res.data.returnCode === "0000") {
@@ -31,8 +32,8 @@ class home extends React.Component<any, IState> {
 
     render() {
         let articlePreviews: any = <p>No article</p>;
-        if (this.state.articles.length > 0) {
-            articlePreviews = this.state.articles.map((article, index) => {
+        if (this.props.articles.length > 0) {
+            articlePreviews = this.props.articles.map((article, index) => {
                 return <Article key={index} {...article} />
             })
         }
@@ -98,4 +99,24 @@ class home extends React.Component<any, IState> {
     }
 }
 
-export default home;
+interface LinkStateToProps {
+    articles: IArticle[]
+}
+
+interface LinkDispatchToProps {
+    getArticleList: () => void
+}
+
+const mapStateToProps = (state: reducerType): LinkStateToProps => {
+    return {
+        articles: state.home.articles
+    }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, actions.homeActionType>): LinkDispatchToProps => {
+    return {
+        getArticleList: () => dispatch(actions.GetArticleList())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(home);

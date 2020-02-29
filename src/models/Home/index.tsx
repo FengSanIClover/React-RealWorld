@@ -18,7 +18,18 @@ export interface Author {
     following: boolean
 }
 
+export interface IProps {
+    articles: IArticle[],
+    getArticleList: () => void
+}
+
 export interface IState {
+    tabs: string[],
+    articles: IArticle[],
+    tags: string[]
+}
+
+export interface IActionState {
     tabs: string[],
     articles: IArticle[],
     tags: string[]

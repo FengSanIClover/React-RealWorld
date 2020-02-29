@@ -1,0 +1,3 @@
+export const GET_ARTICLELIST = "GET_ARTICLELIST";
+
+export type GET_ARTICLELIST = typeof GET_ARTICLELIST;
