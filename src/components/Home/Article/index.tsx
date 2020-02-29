@@ -8,6 +8,17 @@ const Article: React.SFC<IArticle> = (props) => {
     const onLikesHandler = (favoritesCount: number) => {
         setfavoritesCount(favoritesCount += 1);
     }
+
+    const formatBody = (body: string): string => {
+        if (body?.trim().length > 50) {
+            const newBody = `${body.substring(0, 50)}...`;
+            return newBody
+        }
+
+        return body;
+    }
+
+
     return (
         <div className="article-preview">
             <div className="article-meta">
@@ -25,7 +36,7 @@ const Article: React.SFC<IArticle> = (props) => {
             </div>
             <div className="preview-link">
                 <h1>{props.title}</h1>
-                <p>{props.body}</p>
+                <p>{formatBody(props.body)}</p>
                 <span>Read more...</span>
             </div>
         </div>
