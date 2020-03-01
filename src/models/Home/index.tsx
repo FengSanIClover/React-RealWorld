@@ -20,13 +20,13 @@ export interface Author {
 
 export interface IProps {
     articles: IArticle[],
-    getArticleList: () => void
+    tags: string[],
+    getArticleList: () => void,
+    getTagList: () => void
 }
 
 export interface IState {
-    tabs: string[],
-    articles: IArticle[],
-    tags: string[]
+    tabs: string[]
 }
 
 export interface IActionState {

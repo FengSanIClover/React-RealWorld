@@ -3,31 +3,23 @@ import Article from 'components/Home/Article';
 import PopularTag from 'components/Home/PopularTag';
 import _ from 'lodash';
 import { IState, IProps, IArticle } from 'models/Home';
-import axios from 'axios-setting';
-import { AxiosResponse } from 'axios';
 // import {homeActionType} from 'redux-setting/store/actions/Home';
 import * as actions from 'redux-setting/store/actions/Home';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { reducerType } from 'redux-setting/store/reducers';
+import { bindActionCreators } from 'redux';
 
 
 class home extends React.Component<IProps, IState> {
 
     state: IState = {
-        tabs: ["Your Feed", "Global Feed"],
-        articles: [],
-        tags: []
+        tabs: ["Your Feed", "Global Feed"]
     }
 
     componentDidMount() {
         this.props.getArticleList();
-
-        axios.get("/tags").then((res: AxiosResponse) => {
-            if (res.data.returnCode === "0000") {
-                this.setState({ tags: res.data.tags })
-            }
-        })
+        this.props.getTagList();
     }
 
     render() {
@@ -39,8 +31,8 @@ class home extends React.Component<IProps, IState> {
         }
 
         let popularTagList: any = <p>No tag</p>;
-        if (this.state.tags.length > 0) {
-            popularTagList = this.state.tags.map((tag: string, index) => {
+        if (this.props.tags.length > 0) {
+            popularTagList = this.props.tags.map((tag: string, index) => {
                 return <PopularTag key={index} tagName={tag} tagClickHandler={(e: React.MouseEvent<HTMLAnchorElement>) => tagClickHandler(e, tag)} />
             })
         }
@@ -100,22 +92,26 @@ class home extends React.Component<IProps, IState> {
 }
 
 interface LinkStateToProps {
-    articles: IArticle[]
+    articles: IArticle[],
+    tags: string[]
 }
 
 interface LinkDispatchToProps {
-    getArticleList: () => void
+    getArticleList: () => void,
+    getTagList: () => void
 }
 
 const mapStateToProps = (state: reducerType): LinkStateToProps => {
     return {
-        articles: state.home.articles
+        articles: state.home.articles,
+        tags: state.home.tags
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, actions.homeActionType>): LinkDispatchToProps => {
     return {
-        getArticleList: () => dispatch(actions.GetArticleList())
+        getArticleList: () => dispatch(actions.GetArticleList()),
+        getTagList: bindActionCreators(actions.GetTagList, dispatch)
     }
 }
 

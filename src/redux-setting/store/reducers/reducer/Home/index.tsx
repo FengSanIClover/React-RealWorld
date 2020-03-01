@@ -14,7 +14,12 @@ const homeReducer = (state: IActionState = initState, action: homeActionType) =>
             return {
                 ...state,
                 articles: action.payload
-            }
+            };
+        case actionTypes.GET_TAGLIST:
+            return {
+                ...state,
+                tags: action.payload
+            };
         default:
             return state;
     }
