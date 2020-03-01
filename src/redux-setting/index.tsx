@@ -10,7 +10,6 @@ interface IState {
 }
 
 const root: React.SFC<IState> = (props) => {
-
     const store = createStore(reducer, props.initialState, applyMiddleware(thunk as ThunkMiddleware<reducerType, AppActionType>))
 
     return (
