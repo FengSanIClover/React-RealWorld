@@ -21,8 +21,10 @@ export interface Author {
 export interface IProps {
     articles: IArticle[],
     tags: string[],
+    loading: boolean,
     getArticleList: () => void,
-    getTagList: () => void
+    getTagList: () => void,
+    getArticleListByTag: (tagName: string) => void
 }
 
 export interface IState {
@@ -32,5 +34,6 @@ export interface IState {
 export interface IActionState {
     tabs: string[],
     articles: IArticle[],
-    tags: string[]
+    tags: string[],
+    loading: boolean
 }

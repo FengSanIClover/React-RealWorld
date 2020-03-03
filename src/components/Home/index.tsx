@@ -23,11 +23,16 @@ class home extends React.Component<IProps, IState> {
     }
 
     render() {
-        let articlePreviews: any = <p>No article</p>;
-        if (this.props.articles.length > 0) {
-            articlePreviews = this.props.articles.map((article, index) => {
-                return <Article key={index} {...article} />
-            })
+        let articlePreviews;
+        if (this.props.loading) {
+            articlePreviews = <p>load article</p>;
+        } else {
+            articlePreviews = <p>No article</p>;
+            if (this.props.articles.length > 0) {
+                articlePreviews = this.props.articles.map((article, index) => {
+                    return <Article key={index} {...article} />
+                })
+            }
         }
 
         let popularTagList: any = <p>No tag</p>;
@@ -56,6 +61,8 @@ class home extends React.Component<IProps, IState> {
                 newTabs.splice(2, 1, tag);
                 this.setState({ tabs: newTabs })
             }
+
+            this.props.getArticleListByTag(tag);
         }
 
         return (
@@ -93,25 +100,29 @@ class home extends React.Component<IProps, IState> {
 
 interface LinkStateToProps {
     articles: IArticle[],
-    tags: string[]
+    tags: string[],
+    loading: boolean
 }
 
 interface LinkDispatchToProps {
     getArticleList: () => void,
-    getTagList: () => void
+    getTagList: () => void,
+    getArticleListByTag: (tagName: string) => void
 }
 
 const mapStateToProps = (state: reducerType): LinkStateToProps => {
     return {
         articles: state.home.articles,
-        tags: state.home.tags
+        tags: state.home.tags,
+        loading: state.home.loading
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, actions.homeActionType>): LinkDispatchToProps => {
     return {
         getArticleList: () => dispatch(actions.GetArticleList()),
-        getTagList: bindActionCreators(actions.GetTagList, dispatch)
+        getTagList: bindActionCreators(actions.GetTagList, dispatch),
+        getArticleListByTag: bindActionCreators(actions.GetArticleListByTag, dispatch)
     }
 }
 
