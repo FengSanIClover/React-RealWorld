@@ -9,12 +9,14 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { reducerType } from 'redux-setting/store/reducers';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 
 
 class home extends React.Component<IProps, IState> {
 
     state: IState = {
-        tabs: ["Your Feed", "Global Feed"]
+        tabs: ["Your Feed", "Global Feed"],
+        activeLink: 'Global Feed'
     }
 
     componentDidMount() {
@@ -45,12 +47,18 @@ class home extends React.Component<IProps, IState> {
         let tabList: any = <p>No Tab</p>;
         if (this.state.tabs.length > 0) {
             tabList = this.state.tabs.map((tab, index) => {
+                const classVal = this.state.activeLink === tab ? 'nav-link active' : 'nav-link';
                 return (
                     <li key={index} className="nav-item">
-                        <a className="nav-link" href={"index.html"} onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()} >{tab}</a>
+                        <Link className={classVal} to={"index.html"} onClick={(e: React.MouseEvent<HTMLAnchorElement>) => tabClickHandler(e, tab)} >{tab}</Link>
                     </li>
                 )
             })
+        }
+
+        const tabClickHandler = (e: React.MouseEvent<HTMLAnchorElement>, tab: string) => {
+            e.preventDefault();
+            this.setState({ activeLink: tab });
         }
 
         const tagClickHandler = (event: React.MouseEvent<HTMLAnchorElement>, tag: string) => {
@@ -63,6 +71,7 @@ class home extends React.Component<IProps, IState> {
             }
 
             this.props.getArticleListByTag(tag);
+            this.setState({ activeLink: tag });
         }
 
         return (

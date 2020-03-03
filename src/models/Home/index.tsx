@@ -28,7 +28,8 @@ export interface IProps {
 }
 
 export interface IState {
-    tabs: string[]
+    tabs: string[],
+    activeLink: string
 }
 
 export interface IActionState {
